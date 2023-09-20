@@ -16,5 +16,10 @@ radial_0form = dformpy.form_0(
 )
 
 plt.figure(figsize=(8, 8))
-radial_0form.ext_d().contravariant().plot(plt.gca())
+radial_0form.ext_d().contravariant(
+    g=[
+        ["1 + 5 * y ** 2", "0"],
+        ["0", "1 + 5 * x ** 2"],
+    ]
+).plot(plt.gca())
 plt.show()
