@@ -16,5 +16,5 @@ radial_0form = dformpy.form_0(
 )
 
 plt.figure(figsize=(8, 8))
-radial_0form.ext_d().plot(plt.gca())
+radial_0form.ext_d().contravariant().plot(plt.gca())
 plt.show()
