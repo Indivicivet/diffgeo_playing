@@ -7,14 +7,14 @@ from tqdm import tqdm
 
 
 VIZ_SAMPLES = 512
-Z_SAMPLES = 100
+Z_SAMPLES = 200
 ANIM_TIME_S = 5
 VIZ_QX, VIZ_QY = np.meshgrid(
     np.linspace(-1, 1, VIZ_SAMPLES),
     np.linspace(-1, 1, VIZ_SAMPLES),
 )
 VIZ_POINT_SIZE_Q = 0.01
-ZS = np.linspace(0, 10, Z_SAMPLES)
+ZS = np.linspace(2, 8, Z_SAMPLES)
 
 # pseudo-enum
 # todo :: we don't actually use this, it's just here to look pretty
@@ -82,7 +82,7 @@ p' = -dH/dq = n grad n / H
 """
 
 
-def new_qq_pp(qx, qy, px, py, z, physical_eps=0.05, dz=ZS[1] - ZS[0]):
+def new_qq_pp(qx, qy, px, py, z, physical_eps=0.01, dz=ZS[1] - ZS[0]):
     # note: this is a terrible, non-symplectic integrator :)
     n = glass_to_ri(glass_type_pt(qx, qy, z))
     h = - (n ** 2 - px ** 2 - py ** 2) ** 0.5
