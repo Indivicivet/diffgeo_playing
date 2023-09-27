@@ -103,18 +103,17 @@ def new_qq_pp(qx, qy, px, py, z, physical_eps=0.1, dz=ZS[1] - ZS[0]):
 
 frames = []
 for sim_idx, z in enumerate(tqdm(ZS)):
-    view_frame = sim_idx % VIEW_ONE_IN_N == 0
-    if view_frame:
+    if sim_idx % VIEW_ONE_IN_N == 0:
+        # draw stuff:
         working_arr = glass_type_to_picture(glass_type_viz(z))
-    for i, ((qx, qy, px, py), draw_col) in enumerate(zip(points, COLOURS)):
-        if view_frame:
-            # drawing:
+        for (qx, qy, px, py), draw_col in zip(points, COLOURS):
             viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
             working_arr[viz_pos, :] = np.array(draw_col) * 255
-        # simulation:
-        points[i] = new_qq_pp(qx, qy, px, py, z)
-    if view_frame:
         frames.append(Image.fromarray(working_arr))
+    # simulation:
+    for i, (qx, qy, px, py) in enumerate(points):
+        points[i] = new_qq_pp(qx, qy, px, py, z)
+
 
 filename = "paraxial_hamiltonian_anim.gif"
 imageio.mimsave(
