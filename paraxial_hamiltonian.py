@@ -1,6 +1,8 @@
 import numpy as np
 from PIL import Image
 import imageio
+import colorsys
+
 
 VIZ_SAMPLES = 512
 Z_SAMPLES = 100
@@ -60,12 +62,17 @@ points = [
     (0.5, 0.5, 0.1, 0.1),
 ]
 
+COLOURS = [
+    colorsys.hsv_to_rgb(np.random.random(), 0.7, 1)
+    for _ in range(len(points))
+]
+
 frames = []
 for z in ZS:
     working_arr = glass_type_to_picture(glass_type_viz(z))
-    for i, (qx, qy, px, py) in enumerate(points):
+    for i, ((qx, qy, px, py), draw_col) in enumerate(zip(points, COLOURS)):
         viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
-        working_arr[viz_pos, :] = np.random.random(3) * 256
+        working_arr[viz_pos, :] = np.array(draw_col) * 255
     frames.append(Image.fromarray(working_arr))
 
 filename = "paraxial_hamiltonian_anim.gif"
