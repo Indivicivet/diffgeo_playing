@@ -68,9 +68,10 @@ points = [
     for (px0, py0) in [(0, 0), (0.1, 0.1)]
 ]
 
+COLOURS_P = [colorsys.hsv_to_rgb(np.random.random(), 0.7, 1) for _ in range(2)]
 COLOURS = [
-    colorsys.hsv_to_rgb(np.random.random(), 0.7, 1)
-    for _ in range(len(points))
+    COLOURS_P[i % 2]
+    for i in range(len(points))
 ]
 
 """
