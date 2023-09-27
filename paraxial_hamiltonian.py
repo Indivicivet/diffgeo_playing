@@ -1,7 +1,9 @@
+import colorsys
+
 import numpy as np
 from PIL import Image
 import imageio
-import colorsys
+from tqdm import tqdm
 
 
 VIZ_SAMPLES = 512
@@ -90,7 +92,7 @@ def new_qq_pp(qx, qy, px, py, z):
 
 
 frames = []
-for z in ZS:
+for z in tqdm(ZS):
     working_arr = glass_type_to_picture(glass_type_viz(z))
     for i, ((qx, qy, px, py), draw_col) in enumerate(zip(points, COLOURS)):
         viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
