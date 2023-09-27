@@ -9,6 +9,7 @@ VIZ_QX, VIZ_QY = np.meshgrid(
     np.linspace(-1, 1, VIZ_SAMPLES),
     np.linspace(-1, 1, VIZ_SAMPLES),
 )
+VIZ_POINT_SIZE_Q = 0.01
 ZS = np.linspace(0, 10, Z_SAMPLES)
 
 # pseudo-enum
@@ -62,6 +63,9 @@ points = [
 frames = []
 for z in ZS:
     working_arr = glass_type_to_picture(glass_type_viz(z))
+    for i, (qx, qy, px, py) in enumerate(points):
+        viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
+        working_arr[viz_pos, :] = np.random.random(3) * 256
     frames.append(Image.fromarray(working_arr))
 
 filename = "paraxial_hamiltonian_anim.gif"
