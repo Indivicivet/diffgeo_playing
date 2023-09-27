@@ -43,7 +43,7 @@ imageio.mimsave(
     filename,
     frames,
 )
-print(f"saved {len(frames)} to {filename}")
+print(f"saved {len(frames)} frames to {filename}")
 
 
 # todo :: unify functions :)
