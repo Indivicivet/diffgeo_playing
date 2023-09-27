@@ -7,15 +7,15 @@ from tqdm import tqdm
 
 
 VIZ_SAMPLES = 512
-Z_SAMPLES = 250
-VIEW_ONE_IN_N = 2
-ANIM_TIME_S = 5
+Z_SAMPLES = 600
+VIEW_ONE_IN_N = 4
+ANIM_TIME_S = 6
 VIZ_QX, VIZ_QY = np.meshgrid(
     np.linspace(-1, 1, VIZ_SAMPLES),
     np.linspace(-1, 1, VIZ_SAMPLES),
 )
 VIZ_POINT_SIZE_Q = 0.01
-ZS = np.linspace(1, 9, Z_SAMPLES)
+ZS = np.linspace(0, 10, Z_SAMPLES)
 
 # pseudo-enum
 # todo :: we don't actually use this, it's just here to look pretty
@@ -24,7 +24,7 @@ SOME_GLASS = 1
 
 SOME_GLASS_RI = 1.5
 
-T0 = 3  # air thick
+T0 = 1  # air thick
 T1 = 3  # glass thick
 C0 = 0.2  # curvature coeff front face
 C1 = -0.2  # curvature coeff back face
