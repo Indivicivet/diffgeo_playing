@@ -4,6 +4,7 @@ import imageio
 
 VIZ_SAMPLES = 512
 Z_SAMPLES = 100
+ANIM_TIME_S = 5
 VIZ_QX, VIZ_QY = np.meshgrid(
     np.linspace(-1, 1, VIZ_SAMPLES),
     np.linspace(-1, 1, VIZ_SAMPLES),
@@ -37,11 +38,15 @@ def glass_type_to_picture(glass_type_arr):
     return (255 * (glass_type_arr / glass_type_arr.max())).astype(np.uint8)
 
 
-frames = [Image.fromarray(glass_type_to_picture(glass_type_viz(T0 + 0.3)))]
+frames = [
+    Image.fromarray(glass_type_to_picture(glass_type_viz(z)))
+    for z in ZS
+]
 filename = "paraxial_hamiltonian_anim.gif"
 imageio.mimsave(
     filename,
     frames,
+    fps=len(frames) / ANIM_TIME_S,
 )
 print(f"saved {len(frames)} frames to {filename}")
 
