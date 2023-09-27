@@ -51,9 +51,6 @@ def glass_type_pt(qx, qy, z):
     return T0 + C0 * r_squared <= z <= T0 + T1 + C1 * r_squared
 
 
-# paraxial hamiltonian:
-# H = -(n(q, z)^2 - |p|^2)
-
 # qx, qy, px, py
 points = [
     (-0.5, -0.5, 0, 0),
@@ -67,12 +64,25 @@ COLOURS = [
     for _ in range(len(points))
 ]
 
+# paraxial hamiltonian:
+# H = -(n(q, z)^2 - |p|^2)
+
+
+def new_qq_pp(qx, qy, px, py, z):
+    qx2 = qx + px
+    qy2 = qy + py
+    px2 = px
+    py2 = py
+    return qx2, qy2, px2, py2
+
+
 frames = []
 for z in ZS:
     working_arr = glass_type_to_picture(glass_type_viz(z))
     for i, ((qx, qy, px, py), draw_col) in enumerate(zip(points, COLOURS)):
         viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
         working_arr[viz_pos, :] = np.array(draw_col) * 255
+        points[i] = new_qq_pp(qx, qy, px, py, z)
     frames.append(Image.fromarray(working_arr))
 
 filename = "paraxial_hamiltonian_anim.gif"
