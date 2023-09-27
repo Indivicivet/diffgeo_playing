@@ -85,6 +85,8 @@ p' = -dH/dq = -n grad n / H
 def new_qq_pp(qx, qy, px, py, z, physical_eps=0.1, dz=ZS[1] - ZS[0]):
     # note: this is a terrible, non-symplectic integrator :)
     # also todo -- ideally use analytic dn/dx and dn/dy rather than numerical
+    # especially since this numerical is so fragile, and we're using
+    # discontinuous n...
     n = glass_to_ri(glass_type_pt(qx, qy, z))
     h = - (n ** 2 - px ** 2 - py ** 2) ** 0.5
     n_x_deriv = (glass_to_ri(glass_type_pt(qx + physical_eps, qy, z)) - n) / physical_eps
