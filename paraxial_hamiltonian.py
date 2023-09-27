@@ -78,7 +78,7 @@ paraxial hamiltonian:
 H = -(n(q, z)^2 - |p|^2) ** 0.5
 hence Hamilton's equations are:
 q' = dH/dp = -p / H
-p' = dH/dq = (q' . grad n) / H
+p' = -dH/dq = n grad n / H
 """
 
 
