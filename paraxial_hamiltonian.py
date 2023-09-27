@@ -99,8 +99,10 @@ frames = []
 for z in tqdm(ZS):
     working_arr = glass_type_to_picture(glass_type_viz(z))
     for i, ((qx, qy, px, py), draw_col) in enumerate(zip(points, COLOURS)):
+        # drawing:
         viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
         working_arr[viz_pos, :] = np.array(draw_col) * 255
+        # simulation:
         points[i] = new_qq_pp(qx, qy, px, py, z)
     frames.append(Image.fromarray(working_arr))
 
