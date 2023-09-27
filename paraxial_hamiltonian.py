@@ -93,6 +93,8 @@ def new_qq_pp(qx, qy, px, py, z, physical_eps=0.1, dz=ZS[1] - ZS[0]):
     n_y_deriv = (glass_to_ri(glass_type_pt(qx, qy + physical_eps, z)) - n) / physical_eps
     qx2 = qx - dz * px / h
     qy2 = qy - dz * py / h
+    # todo :: I think there are unit failures here between dz and physical_eps
+    # which makes these derivatives non-scale-invariant, aka wrong.
     px2 = px - dz * n * n_x_deriv / h
     py2 = py - dz * n * n_y_deriv / h
     return qx2, qy2, px2, py2
