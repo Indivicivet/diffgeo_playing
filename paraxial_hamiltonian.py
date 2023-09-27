@@ -15,8 +15,11 @@ VIZ_POINT_SIZE_Q = 0.01
 ZS = np.linspace(0, 10, Z_SAMPLES)
 
 # pseudo-enum
+# todo :: we don't actually use this, it's just here to look pretty
 AIR = 0
 SOME_GLASS = 1
+
+SOME_GLASS_RI = 1.5
 
 T0 = 3  # air thick
 T1 = 3  # glass thick
@@ -51,6 +54,10 @@ def glass_type_pt(qx, qy, z):
     return T0 + C0 * r_squared <= z <= T0 + T1 + C1 * r_squared
 
 
+def glass_to_ri(glass_type):
+    return 1 + (SOME_GLASS_RI - 1) * glass_type
+
+
 # qx, qy, px, py
 points = [
     (-0.5, -0.5, 0, 0),
@@ -64,13 +71,19 @@ COLOURS = [
     for _ in range(len(points))
 ]
 
-# paraxial hamiltonian:
-# H = -(n(q, z)^2 - |p|^2)
+"""
+paraxial hamiltonian:
+H = -(n(q, z)^2 - |p|^2) ** 0.5
+hence Hamilton's equations are:
+q' = dH/dp = -p / H
+p' = dH/dq = (q' . grad n) / H
+"""
 
 
 def new_qq_pp(qx, qy, px, py, z):
-    qx2 = qx + px
-    qy2 = qy + py
+    h = - (glass_to_ri(glass_type_pt(qx, qy, z)) ** 2 - px ** 2 - py ** 2) ** 0.5
+    qx2 = qx - px / h
+    qy2 = qy - py / h
     px2 = px
     py2 = py
     return qx2, qy2, px2, py2
