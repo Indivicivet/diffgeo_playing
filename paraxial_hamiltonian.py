@@ -82,12 +82,16 @@ p' = -dH/dq = n grad n / H
 """
 
 
-def new_qq_pp(qx, qy, px, py, z):
-    h = - (glass_to_ri(glass_type_pt(qx, qy, z)) ** 2 - px ** 2 - py ** 2) ** 0.5
+def new_qq_pp(qx, qy, px, py, z, physical_eps=0.05):
+    # note: this is a terrible, non-symplectic integrator :)
+    n = glass_to_ri(glass_type_pt(qx, qy, z))
+    h = - (n ** 2 - px ** 2 - py ** 2) ** 0.5
+    n_x_deriv = (glass_to_ri(glass_type_pt(qx + physical_eps, qy, z)) - n) / physical_eps
+    n_y_deriv = (glass_to_ri(glass_type_pt(qx, qy + physical_eps, z)) - n) / physical_eps
     qx2 = qx - px / h
     qy2 = qy - py / h
-    px2 = px
-    py2 = py
+    px2 = px + n * n_x_deriv / h
+    py2 = py + n * n_y_deriv / h
     return qx2, qy2, px2, py2
 
 
