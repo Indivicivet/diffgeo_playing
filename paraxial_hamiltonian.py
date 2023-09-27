@@ -35,20 +35,11 @@ def glass_type_viz(z):
 
 
 def glass_type_to_picture(glass_type_arr):
-    return (255 * (glass_type_arr / glass_type_arr.max())).astype(np.uint8)
-
-
-frames = [
-    Image.fromarray(glass_type_to_picture(glass_type_viz(z)))
-    for z in ZS
-]
-filename = "paraxial_hamiltonian_anim.gif"
-imageio.mimsave(
-    filename,
-    frames,
-    fps=len(frames) / ANIM_TIME_S,
-)
-print(f"saved {len(frames)} frames to {filename}")
+    return (
+        # todo :: deal with glass types :)
+        np.array([128, 196, 255]).reshape((1, 1, 3))
+        * (glass_type_arr > 0)[..., np.newaxis]
+    ).astype(np.uint8)
 
 
 # todo :: unify functions :)
@@ -67,3 +58,16 @@ points = [
     (0.5, 0.5, 0, 0),
     (0.5, 0.5, 0.1, 0.1),
 ]
+
+frames = []
+for z in ZS:
+    working_arr = glass_type_to_picture(glass_type_viz(z))
+    frames.append(Image.fromarray(working_arr))
+
+filename = "paraxial_hamiltonian_anim.gif"
+imageio.mimsave(
+    filename,
+    frames,
+    fps=len(frames) / ANIM_TIME_S,
+)
+print(f"saved {len(frames)} frames to {filename}")
