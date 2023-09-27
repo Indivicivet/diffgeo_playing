@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+import imageio
 
 VIZ_SAMPLES = 512
 Z_SAMPLES = 100
@@ -36,7 +37,13 @@ def glass_type_to_picture(glass_type_arr):
     return (255 * (glass_type_arr / glass_type_arr.max())).astype(np.uint8)
 
 
-Image.fromarray(glass_type_to_picture(glass_type_viz(T0 + 0.3))).show()
+frames = [Image.fromarray(glass_type_to_picture(glass_type_viz(T0 + 0.3)))]
+filename = "paraxial_hamiltonian_anim.gif"
+imageio.mimsave(
+    filename,
+    frames,
+)
+print(f"saved {len(frames)} to {filename}")
 
 
 # todo :: unify functions :)
