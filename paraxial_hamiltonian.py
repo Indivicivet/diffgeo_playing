@@ -17,11 +17,6 @@ VIZ_QX, VIZ_QY = np.meshgrid(
 VIZ_POINT_SIZE_Q = 0.01
 ZS = np.linspace(0, 10, Z_SAMPLES)
 
-# pseudo-enum
-# todo :: we don't actually use this, it's just here to look pretty
-AIR = 0
-SOME_GLASS = 1
-
 SOME_GLASS_RI = 1.5
 
 T0 = 1  # air thick
