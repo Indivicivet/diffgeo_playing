@@ -1,4 +1,5 @@
 import colorsys
+from dataclasses import dataclass
 
 import numpy as np
 from PIL import Image
@@ -18,24 +19,29 @@ VIZ_POINT_SIZE_Q = 0.01
 ZS = np.linspace(0, 10, Z_SAMPLES)
 Z_SMUDGE = 0.05  # for better numerics; less discontinuities
 
-SOME_GLASS_RI = 1.5
-
-T0 = 1  # air thick
-T1 = 3  # glass thick
-C0 = 0.2  # curvature coeff front face
-C1 = -0.2  # curvature coeff back face
 
 # ri:
 # 1 (z < t0 + c0|q|^2)
 # 1.5 (t0 + c0|q|^2 <= z < t0 + t1 + c1|q|^2)
 # 1 (z > t0 + t1 + c1|q|^2)
-def refractive_index(qx, qy, z):
-    r_squared = (qx ** 2 + qy ** 2)
-    in_lens = np.minimum(
-        np.clip((z - (T0 + C0 * r_squared)) / Z_SMUDGE, 0, 1),
-        np.clip((T0 + T1 + C1 * r_squared - z) / Z_SMUDGE, 0, 1),
-    )
-    return 1 + (SOME_GLASS_RI - 1) * in_lens
+@dataclass
+class ParabolicLens:
+    z0: float = 1
+    thick: float = 3
+    c0: float = 0.2  # curvature coeff front face
+    c1: float = -0.2  # curvature coeff back face
+    ri: float = 1.5
+
+    def refractive_index(self, qx, qy, z):
+        r_squared = qx ** 2 + qy ** 2
+        in_lens = np.minimum(
+            np.clip((z - (self.z0 + self.c0 * r_squared)) / Z_SMUDGE, 0, 1),
+            np.clip((self.z0 + self.thick + self.c1 * r_squared - z) / Z_SMUDGE, 0, 1),
+        )
+        return 1 + (self.ri - 1) * in_lens
+
+
+refractive_index = ParabolicLens().refractive_index
 
 
 def glass_picture(z):
@@ -43,7 +49,7 @@ def glass_picture(z):
     return (
         # todo :: deal with glass types :)
         np.array([128, 196, 255]).reshape((1, 1, 3))
-        * ((ri - 1) / (SOME_GLASS_RI - 1))[..., np.newaxis]
+        * ((ri - 1) / (ri.max() - 1))[..., np.newaxis]
     ).astype(np.uint8)
 
 
