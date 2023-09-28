@@ -33,29 +33,22 @@ C1 = -0.2  # curvature coeff back face
 # 1 (z < t0 + c0|q|^2)
 # 1.5 (t0 + c0|q|^2 <= z < t0 + t1 + c1|q|^2)
 # 1 (z > t0 + t1 + c1|q|^2)
-
-
-def glass_type_viz(z):
-    r_squared = VIZ_QX ** 2 + VIZ_QY ** 2
-    return np.logical_and(
+def refractive_index(qx, qy, z):
+    r_squared = (qx ** 2 + qy ** 2)
+    in_lens = np.logical_and(
         T0 + C0 * r_squared <= z,
         z <= T0 + T1 + C1 * r_squared,
     )
+    return 1 + (SOME_GLASS_RI - 1) * in_lens
 
 
-def glass_type_to_picture(glass_type_arr):
+def glass_picture(z):
+    ri = refractive_index(VIZ_QX, VIZ_QY, z)
     return (
         # todo :: deal with glass types :)
         np.array([128, 196, 255]).reshape((1, 1, 3))
-        * (glass_type_arr > 0)[..., np.newaxis]
+        * (ri > 1)[..., np.newaxis]
     ).astype(np.uint8)
-
-
-# todo :: unify functions :)
-def refractive_index(qx, qy, z):
-    r_squared = (qx ** 2 + qy ** 2)
-    in_lens = T0 + C0 * r_squared <= z <= T0 + T1 + C1 * r_squared
-    return 1 + (SOME_GLASS_RI - 1) * in_lens
 
 
 # qx, qy, px, py
@@ -102,7 +95,7 @@ frames = []
 for sim_idx, z in enumerate(tqdm(ZS)):
     if sim_idx % VIEW_ONE_IN_N == 0:
         # draw stuff:
-        working_arr = glass_type_to_picture(glass_type_viz(z))
+        working_arr = glass_picture(z)
         for (qx, qy, px, py), draw_col in zip(points, COLOURS):
             viz_pos = (VIZ_QX - qx) ** 2 + (VIZ_QY - qy) ** 2 < VIZ_POINT_SIZE_Q ** 2
             working_arr[viz_pos, :] = np.array(draw_col) * 255
