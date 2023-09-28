@@ -47,7 +47,7 @@ def glass_picture(z):
     return (
         # todo :: deal with glass types :)
         np.array([128, 196, 255]).reshape((1, 1, 3))
-        * (ri > 1)[..., np.newaxis]
+        * ((ri - 1) / (SOME_GLASS_RI - 1))[..., np.newaxis]
     ).astype(np.uint8)
 
 
