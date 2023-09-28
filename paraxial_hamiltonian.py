@@ -41,7 +41,10 @@ class ParabolicLens:
         return 1 + (self.ri - 1) * in_lens
 
 
-refractive_index = ParabolicLens().refractive_index
+refractive_index = lambda *a, **kw: np.maximum(
+    ParabolicLens().refractive_index(*a, **kw),
+    ParabolicLens(z0=8, c0=0.15, c1=-0.15).refractive_index(*a, **kw),
+)
 
 
 def glass_picture(z):
