@@ -16,6 +16,7 @@ VIZ_QX, VIZ_QY = np.meshgrid(
 )
 VIZ_POINT_SIZE_Q = 0.01
 ZS = np.linspace(0, 10, Z_SAMPLES)
+Z_SMUDGE = 0.05  # for better numerics; less discontinuities
 
 SOME_GLASS_RI = 1.5
 
@@ -30,9 +31,9 @@ C1 = -0.2  # curvature coeff back face
 # 1 (z > t0 + t1 + c1|q|^2)
 def refractive_index(qx, qy, z):
     r_squared = (qx ** 2 + qy ** 2)
-    in_lens = np.logical_and(
-        T0 + C0 * r_squared <= z,
-        z <= T0 + T1 + C1 * r_squared,
+    in_lens = np.minimum(
+        np.clip((z - (T0 + C0 * r_squared)) / Z_SMUDGE, 0, 1),
+        np.clip((T0 + T1 + C1 * r_squared - z) / Z_SMUDGE, 0, 1),
     )
     return 1 + (SOME_GLASS_RI - 1) * in_lens
 
