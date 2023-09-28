@@ -8,15 +8,15 @@ from tqdm import tqdm
 
 
 VIZ_SAMPLES = 512
-Z_SAMPLES = 600
-VIEW_ONE_IN_N = 4
+Z_SAMPLES = 750
+VIEW_ONE_IN_N = 5
 ANIM_TIME_S = 6
 VIZ_QX, VIZ_QY = np.meshgrid(
     np.linspace(-1, 1, VIZ_SAMPLES),
     np.linspace(-1, 1, VIZ_SAMPLES),
 )
 VIZ_POINT_SIZE_Q = 0.01
-ZS = np.linspace(0, 10, Z_SAMPLES)
+ZS = np.linspace(0, 15, Z_SAMPLES)
 Z_SMUDGE = 0.05  # for better numerics; less discontinuities
 
 
