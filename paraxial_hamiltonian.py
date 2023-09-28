@@ -69,7 +69,7 @@ p' = -dH/dq = -n grad n / H
 """
 
 
-def new_qq_pp(qx, qy, px, py, z, physical_eps=0.1, dz=ZS[1] - ZS[0]):
+def new_qq_pp(qx, qy, px, py, z, physical_eps=0.05, dz=ZS[1] - ZS[0]):
     # note: this is a terrible, non-symplectic integrator :)
     # also todo -- ideally use analytic dn/dx and dn/dy rather than numerical
     # especially since this numerical is so fragile, and we're using
