@@ -52,13 +52,10 @@ def glass_type_to_picture(glass_type_arr):
 
 
 # todo :: unify functions :)
-def glass_type_pt(qx, qy, z):
+def refractive_index(qx, qy, z):
     r_squared = (qx ** 2 + qy ** 2)
-    return T0 + C0 * r_squared <= z <= T0 + T1 + C1 * r_squared
-
-
-def glass_to_ri(glass_type):
-    return 1 + (SOME_GLASS_RI - 1) * glass_type
+    in_lens = T0 + C0 * r_squared <= z <= T0 + T1 + C1 * r_squared
+    return 1 + (SOME_GLASS_RI - 1) * in_lens
 
 
 # qx, qy, px, py
@@ -88,10 +85,10 @@ def new_qq_pp(qx, qy, px, py, z, physical_eps=0.1, dz=ZS[1] - ZS[0]):
     # also todo -- ideally use analytic dn/dx and dn/dy rather than numerical
     # especially since this numerical is so fragile, and we're using
     # discontinuous n...
-    n = glass_to_ri(glass_type_pt(qx, qy, z))
+    n = refractive_index(qx, qy, z)
     h = - (n ** 2 - px ** 2 - py ** 2) ** 0.5
-    n_x_deriv = (glass_to_ri(glass_type_pt(qx + physical_eps, qy, z)) - n) / physical_eps
-    n_y_deriv = (glass_to_ri(glass_type_pt(qx, qy + physical_eps, z)) - n) / physical_eps
+    n_x_deriv = (refractive_index(qx + physical_eps, qy, z) - n) / physical_eps
+    n_y_deriv = (refractive_index(qx, qy + physical_eps, z) - n) / physical_eps
     qx2 = qx - dz * px / h
     qy2 = qy - dz * py / h
     # todo :: I think there are unit failures here between dz and physical_eps
