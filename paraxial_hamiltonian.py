@@ -46,10 +46,11 @@ refractive_index = ParabolicLens().refractive_index
 
 def glass_picture(z):
     ri = refractive_index(VIZ_QX, VIZ_QY, z)
+    div_by = 1 if ri.max() == 1 else ri.max() - 1
     return (
         # todo :: deal with glass types :)
         np.array([128, 196, 255]).reshape((1, 1, 3))
-        * ((ri - 1) / (ri.max() - 1))[..., np.newaxis]
+        * ((ri - 1) / div_by)[..., np.newaxis]
     ).astype(np.uint8)
 
 
