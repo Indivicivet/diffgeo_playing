@@ -12,7 +12,7 @@ class Calculator:
         return self.xx[1] - self.xx[0]
 
     def volume(self, points):
-        return 4 * np.pi * np.sum(self.xx * points) * self.step
+        return 4 * np.pi * np.sum(self.xx * (points - points[-1])) * self.step
 
     def length(self, points):
         grad = (points[1:] - points[:-1]) / self.step
