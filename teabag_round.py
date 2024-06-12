@@ -29,6 +29,7 @@ if __name__ == "__main__":
     print(calc.length(sphere))  # pi / 2 ~ 1.5708
     print(calc.ratio(sphere))  # 32 / (3 pi ^2) ~ 1.0808
 
+    # clear upper bound is sqrt(2) pi / 3 ~ 1.481
     res = optimize.minimize(
         lambda x: -calc.ratio(x),
         x0=sphere,
