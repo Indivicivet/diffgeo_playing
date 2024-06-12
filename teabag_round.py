@@ -13,7 +13,7 @@ class Calculator:
         return 4 * np.pi * np.sum(self.xx * points) * self.step
 
     def length(self, points):
-        grad = (np.roll(points, 1) - points) / self.step
+        grad = (points[1:] - points[:-1]) / self.step
         return np.sum((1 + grad ** 2) ** 0.5) * self.step
 
     def ratio(self, points):
