@@ -1,4 +1,6 @@
 import numpy as np
+from scipy import optimize
+from matplotlib import pyplot as plt
 
 
 class Calculator:
@@ -26,3 +28,14 @@ if __name__ == "__main__":
     print(calc.volume(sphere))  # 4 pi / 3 ~ 4.1888
     print(calc.length(sphere))  # pi / 2 ~ 1.5708
     print(calc.ratio(sphere))  # 32 / (3 pi ^2) ~ 1.0808
+
+    res = optimize.minimize(
+        lambda x: -calc.ratio(x),
+        x0=sphere,
+    )
+    print(res)
+    print(calc.volume(res.x))
+    print(calc.length(res.x))
+    print(calc.ratio(res.x))
+    plt.plot(calc.xx, res.x)
+    plt.show()
