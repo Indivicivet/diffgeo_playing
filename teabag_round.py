@@ -16,7 +16,10 @@ class Calculator:
 
     def length(self, points):
         grad = (points[1:] - points[:-1]) / self.step
-        return np.sum((1 + grad ** 2) ** 0.5) * self.step
+        return (
+            np.sum((1 + grad ** 2) ** 0.5)
+            + (1 + points[-1] ** 2) ** 0.5  # final term penalty
+        ) * self.step
 
     def ratio(self, points):
         return self.volume(points) / self.length(points) ** 3
