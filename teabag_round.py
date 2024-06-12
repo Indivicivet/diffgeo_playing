@@ -23,6 +23,6 @@ class Calculator:
 if __name__ == "__main__":
     calc = Calculator()
     sphere = (1 - calc.xx ** 2) ** 0.5
-    print(calc.volume(sphere))
-    print(calc.length(sphere))
-    print(calc.ratio(sphere))
+    print(calc.volume(sphere))  # 4 pi / 3 ~ 4.1888
+    print(calc.length(sphere))  # pi / 2 ~ 1.5708
+    print(calc.ratio(sphere))  # 32 / (3 pi ^2) ~ 1.0808
