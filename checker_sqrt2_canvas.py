@@ -40,6 +40,7 @@ def evolve(aa, bb, delta_t):
 if __name__ == "__main__":
     rng = np.random.default_rng(seed=23405)
 
+    # todo :: really need to debug this by starting with ~grid
     pts_a = rng.uniform(low=-1, high=1, size=[N, 2])
     pts_b = rng.uniform(low=-1, high=1, size=[N, 2])
 
