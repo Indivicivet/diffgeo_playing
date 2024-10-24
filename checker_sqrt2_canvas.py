@@ -11,7 +11,7 @@ def force_between(pt, other, is_same) -> np.ndarray:
     """
     force d/x^2 - 1/x
     """
-    delta = pt - other
+    delta = other - pt
     dist = (delta**2).sum() ** 0.5
     if dist == 0:
         print(pt, other, is_same, "dist is 0???")  # todo :: exception?
