@@ -19,7 +19,7 @@ def force_between(pt, other, is_same) -> np.ndarray:
 
 def evolve(aa, bb, delta_t):
     aa = aa.copy()
-    bb = aa.copy()
+    bb = bb.copy()
     for i, pt0 in enumerate(aa):
         aa[i] += delta_t * (
             sum(
