@@ -5,7 +5,7 @@ from tqdm import tqdm
 N = 2
 SPACING_CONSTANT = 0.2
 
-FORCE_CLIP = 0.3
+FORCE_CLIP = 1
 
 
 def force_between(pt, other, is_same) -> np.ndarray:
