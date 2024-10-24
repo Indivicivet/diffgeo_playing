@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-N = 60
-SPACING_CONSTANT = 0.1 * (2 * N) ** -0.5
+N = 2
+SPACING_CONSTANT = 0.2
 
-FORCE_CLIP = 2
+FORCE_CLIP = 0.3
 
 
 def force_between(pt, other, is_same) -> np.ndarray:
@@ -17,7 +17,7 @@ def force_between(pt, other, is_same) -> np.ndarray:
     if dist == 0:
         print(pt, other, is_same, "dist is 0???")  # todo :: exception?
         return np.array([0, 0])
-    force_weight = ([2**0.5, 1][is_same] * SPACING_CONSTANT / dist - 1) / dist
+    force_weight = (1 / SPACING_CONSTANT - [2**0.5, 1][is_same] / dist) / dist
     force_weight = abs(force_weight) ** 0.5 * np.sign(force_weight)
     # print(force_weight)
     return (delta / dist) * np.clip(force_weight, -FORCE_CLIP, FORCE_CLIP)
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     plt.scatter(*pts_a.T, label="pts a 0")
     plt.scatter(*pts_b.T, label="pts b 0")
 
-    PLOT_ITERS = [8, 50, 100]
+    PLOT_ITERS = [50]
 
     for iter in tqdm(range(1, max(PLOT_ITERS) + 1)):
         pts_a, pts_b = evolve(pts_a, pts_b, delta_t=0.01)
