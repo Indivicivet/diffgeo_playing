@@ -22,27 +22,17 @@ def force_between(pt, other, is_same) -> np.ndarray:
 
 
 def evolve(aa, bb, delta_t):
-    aa = aa.copy()
-    bb = bb.copy()
+    forces_aa = np.zeros_like(aa)
+    forces_bb = np.zeros_like(bb)
     for i, pt0 in enumerate(aa):
-        aa[i] += delta_t * (
-            sum(
-                force_between(pt0, pt1, is_same=True)
-                for j, pt1 in enumerate(aa)
-                if i != j
-            )
-            + sum(force_between(pt0, pt1, is_same=False) for pt1 in bb)
-        )
+        forces_aa[i] += sum(
+            force_between(pt0, pt1, is_same=True) for j, pt1 in enumerate(aa) if i != j
+        ) + sum(force_between(pt0, pt1, is_same=False) for pt1 in bb)
     for i, pt0 in enumerate(bb):
-        bb[i] += delta_t * (
-            sum(
-                force_between(pt0, pt1, is_same=True)
-                for j, pt1 in enumerate(bb)
-                if i != j
-            )
-            + sum(force_between(pt0, pt1, is_same=False) for pt1 in aa)
-        )
-    return aa, bb
+        forces_bb[i] += sum(
+            force_between(pt0, pt1, is_same=True) for j, pt1 in enumerate(bb) if i != j
+        ) + sum(force_between(pt0, pt1, is_same=False) for pt1 in aa)
+    return aa + delta_t * forces_aa, bb + delta_t * forces_bb
 
 
 if __name__ == "__main__":
