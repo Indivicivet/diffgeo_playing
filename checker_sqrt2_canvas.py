@@ -17,7 +17,7 @@ def force_between(pt, other, is_same) -> np.ndarray:
     if dist == 0:
         print(pt, other, is_same, "dist is 0???")  # todo :: exception?
         return np.array([0, 0])
-    force_weight = (1 / SPACING_CONSTANT - [2**0.5, 1][is_same] / dist) / dist
+    force_weight = (1 / SPACING_CONSTANT - [1, 2**0.5][is_same] / dist) / dist
     force_weight = abs(force_weight) ** 0.5 * np.sign(force_weight)
     # print(force_weight)
     return (delta / dist) * np.clip(force_weight, -FORCE_CLIP, FORCE_CLIP)
