@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 N = 20
 SPACING_CONSTANT = 1.5 * (2 * N) ** -0.5
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
     PLOT_ITERS = [1, 5, 10, 20, 40]
 
-    for iter in range(1, max(PLOT_ITERS) + 1):
+    for iter in tqdm(range(1, max(PLOT_ITERS) + 1)):
         pts_a, pts_b = evolve(pts_a, pts_b, delta_t=0.01)
         if iter in PLOT_ITERS:
             plt.scatter(*pts_a.T, label=f"pts a {iter}")
