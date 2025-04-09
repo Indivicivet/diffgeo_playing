@@ -38,6 +38,7 @@ class ManyCircleAnimator:
     circles: Sequence[CircleIn3D]
     latest_idx: int = 0
     lines: Sequence = field(default_factory=list)
+    update_rate: float = 10
     _ax = None
 
     def _update(self, frame):
@@ -51,7 +52,11 @@ class ManyCircleAnimator:
     def plot(self):
         fig = plt.figure()
         self._ax = fig.add_subplot(111, projection="3d")
-        _anim = mpl_animation.FuncAnimation(fig, self._update, interval=1000)
+        _anim = mpl_animation.FuncAnimation(
+            fig,
+            self._update,
+            interval=1000 / self.update_rate,
+        )
         plt.show()
 
 
