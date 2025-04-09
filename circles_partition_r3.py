@@ -100,16 +100,16 @@ def animate():
         # todo :: deal with exactly on axis ones separately
         for pt_x, pt_y in pts:
             grad_min = pt_y / pt_x
-            for theta in np.linspace(grad_min, np.pi / 2 - 0.001, 5):
-                vx = np.cos(theta)
-                vy = np.sin(theta)
+            for grad in np.linspace(grad_min + 0.01, np.pi / 2 - 0.001, 5):
+                vx = np.cos(grad)
+                vy = np.sin(grad)
                 # todo :: do the rest of the partition :)
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
                         position=(vx, vy, 0),
                         normal=(vx, vy, 0),
-                        radius=0.1,
+                        radius=origin_sph_r * np.tanh(grad - grad_min),
                     )
                 )
     anim = ManyCircleAnimator(
