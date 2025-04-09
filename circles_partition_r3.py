@@ -99,8 +99,8 @@ def animate():
         # also these will come in pairs
         # todo :: deal with exactly on axis ones separately
         grad_min = pt_y / pt_x
-        for log_grad in np.linspace(0.1, 1, 5):
-            grad = np.exp(log_grad)
+        for log_grad in np.linspace(0.1, 1, 10):
+            grad = grad_min * np.exp(log_grad)
             r1 = origin_sph_r * np.tanh(1 / (grad - grad_min))
             vx = np.cos(grad)
             vy = np.sin(grad)
