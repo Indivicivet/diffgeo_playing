@@ -99,14 +99,17 @@ def animate():
         # also these will come in pairs
         # todo :: deal with exactly on axis ones separately
         for pt_x, pt_y in pts:
-            for intersection_theta in [1]: #np.linspace(0, np.pi / 2, 5):
+            grad_min = pt_y / pt_x
+            for theta in np.linspace(grad_min, np.pi / 2 - 0.001, 5):
+                vx = np.cos(theta)
+                vy = np.sin(theta)
                 # todo :: do the rest of the partition :)
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
-                        position=(pt_x, pt_y, 0),
-                        normal=(1, 0, 0),  # todo :: gradient
-                        radius=0.1 * intersection_theta,
+                        position=(vx, vy, 0),
+                        normal=(vx, vy, 0),
+                        radius=0.1,
                     )
                 )
     anim = ManyCircleAnimator(
