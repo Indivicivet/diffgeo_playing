@@ -66,6 +66,21 @@ class ManyCircleAnimator:
         plt.show()
 
 
+def _sphere_circle_arr_intersection(r):
+    """
+    intersection of sphere radius r in the origin with the set of circles
+    centered on (4n+1, 0, 0)
+    """
+    n = (r + 2) // 4 * (-1 if (r // 2) % 2 else 1)
+    print(r, n)
+    circ_x0 = 4 * n + 1
+    x = (r ** 2 + circ_x0 ** 2 - 1) / (2 * circ_x0)
+    y2 = r ** 2 - x ** 2
+    if y2 < 0:
+        return [(0, 0), (0, 0)]
+    return [(x, y2 ** 0.5), (x, -y2 ** 0.5)]
+
+
 def animate():
     circs = []
     for i in range(-3, 3):
@@ -76,20 +91,24 @@ def animate():
                 radius=1,
             )
         )
-    for origin_sph_r in np.linspace(0, 10, 10)[1:]:  # skip 0
+    for origin_sph_r in np.linspace(0, 3, 30)[1:]:  # skip 0
         # calculate intersections w circle:
+        pts = _sphere_circle_arr_intersection(origin_sph_r)
         # todo
         # initial theta depends on gradient?
         # also these will come in pairs
-        for intersection_theta in np.linspace(0, np.pi / 2, 5):
-            circs.append(
-                CircleIn3D(
-                    # todo temp nonsense
-                    position=(0, 0, intersection_theta),
-                    normal=(0, 0, 1),
-                    radius=origin_sph_r,
+        # todo :: deal with exactly on axis ones separately
+        for pt_x, pt_y in pts:
+            for intersection_theta in [1]: #np.linspace(0, np.pi / 2, 5):
+                # todo :: do the rest of the partition :)
+                circs.append(
+                    CircleIn3D(
+                        # todo temp nonsense
+                        position=(pt_x, pt_y, 0),
+                        normal=(1, 0, 0),  # todo :: gradient
+                        radius=0.1 * intersection_theta,
+                    )
                 )
-            )
     anim = ManyCircleAnimator(
         circles=sorted(
             circs,
