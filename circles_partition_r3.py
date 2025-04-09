@@ -44,7 +44,7 @@ class ManyCircleAnimator:
     circles: Sequence[CircleIn3D]
     latest_idx: int = 0
     lines: Sequence = field(default_factory=list)
-    update_rate: float = 10
+    update_rate: float = 1e10
     _ax = None
 
     def _update(self, frame):
@@ -83,7 +83,7 @@ def _sphere_circle_arr_intersection(r):
 
 def animate():
     circs = []
-    for i in range(-3, 3):
+    for i in range(-1, 2):
         circs.append(
             CircleIn3D(
                 position=(4 * i + 1, 0, 0),
@@ -91,7 +91,7 @@ def animate():
                 radius=1,
             )
         )
-    for origin_sph_r in np.linspace(0, 30, 30)[1:]:  # skip 0
+    for origin_sph_r in np.linspace(0, 5, 30)[1:]:  # skip 0
         # calculate intersections w circle:
         pt_x, pt_y = _sphere_circle_arr_intersection(origin_sph_r)
         # todo
@@ -117,10 +117,11 @@ def animate():
                     )
                 )
     anim = ManyCircleAnimator(
-        circles=sorted(
-            circs,
-            key=CircleIn3D.min_origin_dist,
-        )
+        circles=circs
+        #sorted(
+            #circs,
+            #key=CircleIn3D.min_origin_dist,
+        #)
     )
     anim.plot()
 
