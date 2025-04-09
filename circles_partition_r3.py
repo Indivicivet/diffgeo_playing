@@ -77,8 +77,8 @@ def _sphere_circle_arr_intersection(r):
     x = (r ** 2 + circ_x0 ** 2 - 1) / (2 * circ_x0)
     y2 = r ** 2 - x ** 2
     if y2 < 0:
-        return [(0, 0), (0, 0)]
-    return [(x, y2 ** 0.5), (x, -y2 ** 0.5)]
+        return 0, 0
+    return x, y2 ** 0.5
 
 
 def animate():
@@ -93,24 +93,29 @@ def animate():
         )
     for origin_sph_r in np.linspace(0, 30, 30)[1:]:  # skip 0
         # calculate intersections w circle:
-        pts = _sphere_circle_arr_intersection(origin_sph_r)
+        pt_x, pt_y = _sphere_circle_arr_intersection(origin_sph_r)
         # todo
         # initial theta depends on gradient?
         # also these will come in pairs
         # todo :: deal with exactly on axis ones separately
-        for pt_x, pt_y in pts:
-            grad_min = pt_y / pt_x
-            for log_grad in np.linspace(0, 10, 10):
-                grad = grad_min * np.exp(log_grad)
-                vx = np.cos(grad)
-                vy = np.sin(grad)
-                # todo :: do the rest of the partition :)
+        grad_min = pt_y / pt_x
+        for log_grad in np.linspace(0, 2, 10):
+            grad = grad_min * np.exp(log_grad)
+            vx = np.cos(grad)
+            vy = np.sin(grad)
+            tbd = np.tanh(grad - grad_min) + 0.01  # tbd
+            # todo :: do the rest of the partition :)
+            for sign in [1, -1]:
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
-                        position=(vx * origin_sph_r, vy * origin_sph_r, 0),
-                        normal=(vx, vy, 0),
-                        radius=origin_sph_r * (np.tanh(grad - grad_min) + 0.01),
+                        position=(
+                            vx * origin_sph_r * (1 - tbd),
+                            sign * vy * origin_sph_r * (1 - tbd),
+                            0,
+                        ),
+                        normal=(vx, vy * sign, 0),
+                        radius=origin_sph_r * tbd,
                     )
                 )
     anim = ManyCircleAnimator(
