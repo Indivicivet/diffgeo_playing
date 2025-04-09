@@ -99,23 +99,21 @@ def animate():
         # also these will come in pairs
         # todo :: deal with exactly on axis ones separately
         grad_min = pt_y / pt_x
-        for log_grad in np.linspace(0.1, 1, 10):
-            grad = grad_min * np.exp(log_grad)
-            r1 = origin_sph_r * np.tanh(1 / (grad - grad_min))
-            vx = np.cos(grad)
-            vy = np.sin(grad)
-            # todo :: do the rest of the partition :)
+        for t0 in np.linspace(0.1, 1, 10):
+            theta0 = np.atan2(pt_y, pt_x)
+            # start the same, diverge apart:
+            theta1 = theta0 * (1 - t0)
+            theta2 = theta0 + (np.pi - theta0) * t0
             for sign in [1, -1]:
+                v1 = np.array([np.cos(theta1), np.sin(theta1) * sign]) * origin_sph_r
+                v2 = np.array([np.cos(theta2), np.sin(theta2) * sign]) * origin_sph_r
+                v_diff = v1 - v2
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
-                        position=(
-                            vx * r1,
-                            sign * vy * r1,
-                            0,
-                        ),
-                        normal=(vx, vy * sign, 0),
-                        radius=(origin_sph_r ** 2 - r1 ** 2) ** 0.5,
+                        position=(*(v1 + v2) / 2, 0),
+                        normal=(v_diff[1], -v_diff[0], 0),
+                        radius=sum(((v1 - v2) / 2) ** 2) ** 0.5,
                     )
                 )
     anim = ManyCircleAnimator(
