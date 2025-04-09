@@ -99,23 +99,23 @@ def animate():
         # also these will come in pairs
         # todo :: deal with exactly on axis ones separately
         grad_min = pt_y / pt_x
-        for log_grad in np.linspace(0, 2, 10):
-            grad = grad_min * np.exp(log_grad)
+        for log_grad in np.linspace(0.1, 1, 5):
+            grad = np.exp(log_grad)
+            r1 = origin_sph_r * np.tanh(1 / (grad - grad_min))
             vx = np.cos(grad)
             vy = np.sin(grad)
-            tbd = np.tanh(grad - grad_min) + 0.01  # tbd
             # todo :: do the rest of the partition :)
             for sign in [1, -1]:
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
                         position=(
-                            vx * origin_sph_r * (1 - tbd),
-                            sign * vy * origin_sph_r * (1 - tbd),
+                            vx * r1,
+                            sign * vy * r1,
                             0,
                         ),
                         normal=(vx, vy * sign, 0),
-                        radius=origin_sph_r * tbd,
+                        radius=(origin_sph_r ** 2 - r1 ** 2) ** 0.5,
                     )
                 )
     anim = ManyCircleAnimator(
