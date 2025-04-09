@@ -32,6 +32,12 @@ class CircleIn3D:
             + self.radius * (np.outer(v0, np.cos(t)) + np.outer(v1, np.sin(t)))
         )
 
+    def min_origin_dist(self):
+        # todo :: consider more optimal calculation ^^
+        # (i.e. can do this just with linear algebra without discretizing
+        # to points, but doing this quickly to be lazy)
+        return np.min(np.linalg.norm(self.get_points(n_points=20)))
+
 
 @dataclass
 class ManyCircleAnimator:
@@ -70,12 +76,12 @@ def animate():
                 radius=1,
             )
         )
-    for origin_sph_r in np.linspace(0, 10, 100)[1:]:  # skip 0
+    for origin_sph_r in np.linspace(0, 10, 10)[1:]:  # skip 0
         # calculate intersections w circle:
         # todo
         # initial theta depends on gradient?
         # also these will come in pairs
-        for intersection_theta in np.linspace(0, np.pi / 2, 10):
+        for intersection_theta in np.linspace(0, np.pi / 2, 5):
             circs.append(
                 CircleIn3D(
                     # todo temp nonsense
@@ -84,7 +90,12 @@ def animate():
                     radius=origin_sph_r,
                 )
             )
-    anim = ManyCircleAnimator(circles=circs)
+    anim = ManyCircleAnimator(
+        circles=sorted(
+            circs,
+            key=CircleIn3D.min_origin_dist,
+        )
+    )
     anim.plot()
 
 
