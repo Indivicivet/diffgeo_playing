@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Sequence
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -32,9 +33,29 @@ class CircleIn3D:
         )
 
 
-def plot_time_t():
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
+@dataclass
+class ManyCircleAnimator:
+    circles: Sequence[CircleIn3D]
+    latest_idx: int = 0
+    lines: Sequence = field(default_factory=list)
+    _ax = None
+
+    def _update(self, frame):
+        if self.latest_idx < len(self.circles) and self._ax is not None:
+            self.lines.append(
+                self._ax.plot(*self.circles[self.latest_idx].get_points())[0]
+            )
+            self.latest_idx += 1
+        return self.lines
+
+    def plot(self):
+        fig = plt.figure()
+        self._ax = fig.add_subplot(111, projection="3d")
+        _anim = mpl_animation.FuncAnimation(fig, self._update, interval=1000)
+        plt.show()
+
+
+def animate():
     circs = []
     for i in range(-10, 10):
         circs.append(
@@ -44,20 +65,9 @@ def plot_time_t():
                 radius=1,
             )
         )
-    latest_idx = 0
-    lines = []
-
-    def update(frame):
-        nonlocal latest_idx
-        new_circ = circs[latest_idx]
-        latest_idx += 1
-        line = ax.plot(*new_circ.get_points())[0]
-        lines.append(line)
-        return lines
-
-    _anim = mpl_animation.FuncAnimation(fig, update, interval=1000)
-    plt.show()
+    anim = ManyCircleAnimator(circles=circs)
+    anim.plot()
 
 
 if __name__ == "__main__":
-    plot_time_t()
+    animate()
