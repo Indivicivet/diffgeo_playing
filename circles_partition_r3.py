@@ -62,7 +62,7 @@ class ManyCircleAnimator:
 
 def animate():
     circs = []
-    for i in range(-10, 10):
+    for i in range(-3, 3):
         circs.append(
             CircleIn3D(
                 position=(4 * i + 1, 0, 0),
@@ -70,6 +70,20 @@ def animate():
                 radius=1,
             )
         )
+    for origin_sph_r in np.linspace(0, 10, 100)[1:]:  # skip 0
+        # calculate intersections w circle:
+        # todo
+        # initial theta depends on gradient?
+        # also these will come in pairs
+        for intersection_theta in np.linspace(0, np.pi / 2, 10):
+            circs.append(
+                CircleIn3D(
+                    # todo temp nonsense
+                    position=(0, 0, intersection_theta),
+                    normal=(0, 0, 1),
+                    radius=origin_sph_r,
+                )
+            )
     anim = ManyCircleAnimator(circles=circs)
     anim.plot()
 
