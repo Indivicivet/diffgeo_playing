@@ -91,7 +91,7 @@ def animate():
                 radius=1,
             )
         )
-    for origin_sph_r in np.linspace(0, 3, 30)[1:]:  # skip 0
+    for origin_sph_r in np.linspace(0, 30, 30)[1:]:  # skip 0
         # calculate intersections w circle:
         pts = _sphere_circle_arr_intersection(origin_sph_r)
         # todo
@@ -100,16 +100,17 @@ def animate():
         # todo :: deal with exactly on axis ones separately
         for pt_x, pt_y in pts:
             grad_min = pt_y / pt_x
-            for grad in np.linspace(grad_min + 0.01, np.pi / 2 - 0.001, 5):
+            for log_grad in np.linspace(0, 10, 10):
+                grad = grad_min * np.exp(log_grad)
                 vx = np.cos(grad)
                 vy = np.sin(grad)
                 # todo :: do the rest of the partition :)
                 circs.append(
                     CircleIn3D(
                         # todo temp nonsense
-                        position=(vx, vy, 0),
+                        position=(vx * origin_sph_r, vy * origin_sph_r, 0),
                         normal=(vx, vy, 0),
-                        radius=origin_sph_r * np.tanh(grad - grad_min),
+                        radius=origin_sph_r * (np.tanh(grad - grad_min) + 0.01),
                     )
                 )
     anim = ManyCircleAnimator(
